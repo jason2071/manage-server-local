@@ -1,7 +1,7 @@
 {
   "name": "server-nest",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.5",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,11 +11,15 @@
   "dependencies": {
     "@tauri-apps/api": "^2.8.0",
     "@tauri-apps/cli": "^2.8.0",
+    "@tauri-apps/plugin-dialog": "^2.4.0",
+    "@tauri-apps/plugin-opener": "^2.5.4",
+    "@tauri-apps/plugin-process": "^2.0.0",
+    "@tauri-apps/plugin-updater": "^2.0.0",
     "@vitejs/plugin-react": "^4.3.4",
-    "typescript": "~5.7.2",
-    "vite": "^6.0.5",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "typescript": "~5.7.2",
+    "vite": "^6.0.5"
   },
   "devDependencies": {
     "@types/react": "^18.3.18",

@@ -18,3 +18,6 @@ Desktop.ini
 # Local runtime data and logs
 *.log
 servers.json
+
+# Local codebase-analysis output
+graphify-out/
