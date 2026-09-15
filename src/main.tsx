@@ -197,7 +197,7 @@ function App() {
         {notice && <div className="notice"><span>i</span>{notice}<button onClick={() => setNotice("")}>×</button></div>}
 
         <section className="server-list">
-          {servers.length === 0 ? <EmptyState onAdd={() => setEditing(blankProfile())} /> : <><div className="server-table-head" role="row"><span>เซิร์ฟเวอร์</span><span>คำสั่ง</span><span className="table-directory">โฟลเดอร์</span><span>URL</span><span className="table-actions">จัดการ</span></div>{servers.map((server) => (
+          {servers.length === 0 ? <EmptyState onAdd={() => setEditing(blankProfile())} /> : <><div className="server-table-head" role="row"><span>เซิร์ฟเวอร์</span><span>สถานะ</span><span>URL</span><span className="table-actions">จัดการ</span></div>{servers.map((server) => (
             <ServerCard key={server.profile.id} server={server} busy={busy} onAction={runAction} onTest={testHealth} onOpen={openInBrowser} onLogs={showLogs} onEdit={() => setEditing(server.profile)} onDelete={() => setDeleteTarget(server)} />
           ))}</>}
         </section>
@@ -215,7 +215,7 @@ function EmptyState({ onAdd }: { onAdd: () => void }) {
 }
 
 function ServerCard({ server, busy, onAction, onTest, onOpen, onLogs, onEdit, onDelete }: { server: ServerView; busy: string | null; onAction: (id: string, action: "start" | "stop" | "restart") => void; onTest: (server: ServerView) => void; onOpen: (server: ServerView) => void; onLogs: (server: ServerView) => void; onEdit: () => void; onDelete: () => void }) {
-  const { profile, status, pid, detail } = server;
+  const { profile, status, detail } = server;
   const pending = (action: string) => busy === `${action}:${profile.id}`;
   const healthLabel = profile.healthUrl?.replace(/^https?:\/\//, "");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -237,9 +237,8 @@ function ServerCard({ server, busy, onAction, onTest, onOpen, onLogs, onEdit, on
   };
 
   return <article className="server-card">
-    <div className="server-identity"><div className={`runtime-icon ${profile.runtime}`}>{profile.runtime === "node" ? "JS" : profile.runtime === "python" ? "PY" : "⌘"}</div><div><div className="server-title"><h2 title={profile.name}>{profile.name}</h2><span className={`status ${status}`}><i />{statusLabel}</span></div>{detail && <p className="detail" title={detail}>{detail}</p>}</div></div>
-    <p className="command" title={`${profile.command} ${profile.arguments.join(" ")}`}><code>{profile.command} {profile.arguments.join(" ")}</code></p>
-    <p className="location server-directory" title={profile.workingDirectory}>⌁ {profile.workingDirectory}</p>
+    <div className="server-identity"><div className={`runtime-icon ${profile.runtime}`}>{profile.runtime === "node" ? "JS" : profile.runtime === "python" ? "PY" : "⌘"}</div><div><div className="server-title"><h2 title={profile.name}>{profile.name}</h2></div>{detail && <p className="detail" title={detail}>{detail}</p>}</div></div>
+    <div className="server-state"><span className={`status ${status}`} title={detail}><i />{statusLabel}</span></div>
     <div className="server-endpoint">{profile.healthUrl ? <button type="button" className="health-link" title={`เปิด ${profile.healthUrl}`} onClick={() => onOpen(server)}>↗ {healthLabel}</button> : <span>—</span>}</div>
     <div className="card-actions">
       {status === "running" ? <button className="action stop" disabled={pending("stop")} onClick={() => onAction(profile.id, "stop")}>{pending("stop") ? "…" : "■ หยุด"}</button> : <button className="action start" disabled={pending("start")} onClick={() => onAction(profile.id, "start")}>{pending("start") ? "…" : "▶ เริ่ม"}</button>}
