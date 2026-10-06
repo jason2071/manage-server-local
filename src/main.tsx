@@ -194,14 +194,20 @@ function App() {
           <p className="tray-note">ปิดหน้าต่างเพื่อซ่อนแอปได้ server จะยังรันอยู่</p>
         </div>
 
-        {notice && <div className="notice"><span>i</span>{notice}<button onClick={() => setNotice("")}>×</button></div>}
-
         <section className="server-list">
           {servers.length === 0 ? <EmptyState onAdd={() => setEditing(blankProfile())} /> : <><div className="server-table-head" role="row"><span>เซิร์ฟเวอร์</span><span>สถานะ</span><span>URL</span><span className="table-actions">จัดการ</span></div>{servers.map((server) => (
             <ServerCard key={server.profile.id} server={server} busy={busy} onAction={runAction} onTest={testHealth} onOpen={openInBrowser} onLogs={showLogs} onEdit={() => setEditing(server.profile)} onDelete={() => setDeleteTarget(server)} />
           ))}</>}
         </section>
       </section>
+
+      <div className="toast-region" role="status" aria-live="polite" aria-atomic="true">
+        {notice && <div className="toast">
+          <span className="toast-icon" aria-hidden="true">i</span>
+          <p className="toast-message">{notice}</p>
+          <button type="button" className="toast-close" aria-label="ปิดการแจ้งเตือน" onClick={() => setNotice("")}>×</button>
+        </div>}
+      </div>
 
       {editing && <ServerDialog profile={editing} onClose={() => setEditing(null)} onSaved={async () => { setEditing(null); setNotice("บันทึกการตั้งค่าแล้ว"); await loadServers(); }} />}
       {logsFor && <LogDialog server={logsFor} logs={logs} onClose={() => setLogsFor(null)} onRefresh={() => void showLogs(logsFor)} />}
